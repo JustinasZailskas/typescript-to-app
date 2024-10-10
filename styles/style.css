@@ -1,0 +1,72 @@
+ul {
+  padding: 1rem;
+  margin: 0;
+  background-color: #a1d6b2;
+  box-shadow: 0 0 5px #cedf9f;
+  border: 1px solid #cedf9f;
+  border-radius: 5px;
+  list-style-type: none;
+}
+
+button {
+  border-radius: 10px;
+  background-color: #e8b86d;
+}
+
+#user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#user img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50px;
+  margin: 0;
+}
+#user h5 {
+  margin: 10px 0;
+}
+
+#tasksList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  color: black;
+  background-color: #f1f3c2;
+  border-radius: 5px;
+}
+.task--start {
+  background-color: #b7e5b4;
+}
+.task--stop {
+  background-color: #c7c8cc;
+}
+
+.taskLiElemContainer li {
+  margin: 0;
+  line-height: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 5px;
+}
+
+.displayMessage {
+  display: flex;
+  justify-content: center;
+}
+
+.timeContainer {
+  margin: 0;
+  font-size: 1rem;
+}
