@@ -1,4 +1,4 @@
-import { IModel } from "./IModel.js";
+import { IModel } from "./IModel";
 
 export class BaseModel implements IModel {
   private id: string;

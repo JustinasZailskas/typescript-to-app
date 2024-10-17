@@ -2,3 +2,4 @@ dist/
 .parcel-cache/
 js/
 node_modules/
+public/

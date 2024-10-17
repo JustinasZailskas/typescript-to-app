@@ -1,10 +1,13 @@
-import { Task } from "./Models/Task.js";
-import { User } from "./Models/User.js";
-import { TaskManager } from "./Managers/TaskManager.js";
+import { Task } from "./Models/Task";
+import { User } from "./Models/User";
+import { TaskManager } from "./Managers/TaskManager";
+import "./css/sakura.css";
+import "./css/style.css";
 
 // const taskItem = new Task("Task1", "created");
-
+addEventListener("DOMContentLoaded", printAllTasks);
 const taskManager = new TaskManager();
+const kamPriklauso = new User("Justinas");
 
 function createTask(): void {
   //paimam task title is laukelio ir priskiriam kintamajam
@@ -14,10 +17,20 @@ function createTask(): void {
     "newTaskInput"
   ) as HTMLInputElement;
   const taskTitle = taskElement.value;
-  const kamPriklauso = new User("Justinas");
   const taskItem = new Task(taskTitle, kamPriklauso.getID());
 
   taskManager.add(taskItem);
+  taskManager.showAll();
+}
+
+async function printAllTasks(): Promise<void> {
+  const tasks = await fetch("./tasks.json");
+  const tasksJson = await tasks.json();
+
+  tasksJson.forEach((taskData: any): void => {
+    const taskItem = new Task(taskData.title, kamPriklauso.getID());
+    taskManager.add(taskItem);
+  });
   taskManager.showAll();
 }
 
