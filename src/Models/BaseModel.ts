@@ -1,40 +1,35 @@
-import { IModel } from "./IModel";
+import { IModel } from "./Interfaces/IModel";
 
 export class BaseModel implements IModel {
-  private id: string;
+  private _id: string = "";
   private status: string;
-  private createdAt: number;
+  private createdAt: Date;
   constructor(private title: string) {
-    this.id = crypto.randomUUID();
     this.status = "created";
-    this.createdAt = Date.now();
+    this.createdAt = new Date("1970-01-01T00:00:00.000Z");
   }
-  getID() {
-    return this.id;
+  getID(): string {
+    return this._id;
   }
-  getTitle() {
+  getTitle(): string {
     return this.title;
   }
-  getStatus() {
+  getStatus(): string {
     return this.status;
   }
-  getDate() {
+  getDate(): Date {
     return this.createdAt;
   }
-  setID(id: string) {
-    this.id = id;
+  setID(id: string): void {
+    this._id = id;
   }
-  setTitle(title: string) {
+  setTitle(title: string): void {
     this.title = title;
   }
-  setStatus(status: string) {
+  setStatus(status: string): void {
     this.status = status;
   }
-  setDate(createdAt: number) {
+  setDate(createdAt: Date): void {
     this.createdAt = createdAt;
   }
-
-  //   completeTask() {
-  //     this.status = "completed";
-  //   }
 }
