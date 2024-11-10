@@ -17,8 +17,15 @@ export default class HtmlWriter implements IWriter {
     const statusButton = document.createElement("button");
 
     taskLiElement.textContent = item.getTitle();
-    timeElement.textContent = item.getDate().toString();
-    deleteButton.textContent = "Delete";
+    console.log(item);
+
+    const timestamp = item.getDate();
+
+    const dateFromTimestamp = new Date(timestamp);
+    timeElement.textContent = `${dateFromTimestamp}`;
+    deleteButton.textContent = "Delete"; //data arba id kaip kuriamas
+    deleteButton.setAttribute("element-id", item.getID());
+
     statusButton.textContent = item.getStatus();
 
     taskLiContainer.classList.add("task");
@@ -27,6 +34,7 @@ export default class HtmlWriter implements IWriter {
     timeElement.classList.add("timeContainer");
     bttContainer.classList.add("buttonContainer");
 
+    bttContainer.appendChild(statusButton);
     bttContainer.appendChild(deleteButton);
     taskLiElementContainer.appendChild(taskLiElement);
     taskLiElementContainer.appendChild(timeElement);

@@ -10,6 +10,7 @@ export class OutputHandler {
     this.handle = this.handle.bind(this);
   }
   async handle(): Promise<void> {
+    this.writer.clear();
     const models: IModel[] = await this.manager.getAll();
     models.forEach((model: IModel): void => {
       this.writer.write(model);

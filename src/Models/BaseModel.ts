@@ -3,10 +3,10 @@ import { IModel } from "./Interfaces/IModel";
 export class BaseModel implements IModel {
   private _id: string = "";
   private status: string;
-  private createdAt: Date;
+  private createdAt: number;
   constructor(private title: string) {
-    this.status = "created";
-    this.createdAt = new Date("1970-01-01T00:00:00.000Z");
+    this.status = "Created";
+    this.createdAt = Date.now();
   }
   getID(): string {
     return this._id;
@@ -17,7 +17,7 @@ export class BaseModel implements IModel {
   getStatus(): string {
     return this.status;
   }
-  getDate(): Date {
+  getDate(): number {
     return this.createdAt;
   }
   setID(id: string): void {
@@ -29,7 +29,7 @@ export class BaseModel implements IModel {
   setStatus(status: string): void {
     this.status = status;
   }
-  setDate(createdAt: Date): void {
+  setDate(createdAt: number): void {
     this.createdAt = createdAt;
   }
 }

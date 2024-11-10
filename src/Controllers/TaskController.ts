@@ -15,7 +15,6 @@ export class TaskController {
     const htmlWriter = new HtmlWriter(this.taskManager);
     this.outputHandler = new OutputHandler(this.taskManager, htmlWriter);
     this.view = new TaskView(htmlWriter);
-
     this.initialize();
   }
 
@@ -32,7 +31,13 @@ export class TaskController {
     const createButton = document.getElementById(
       "addButton"
     ) as HTMLButtonElement;
+
     createButton.addEventListener("click", () => this.createTask());
+
+    const tasksList = document.getElementById("tasksList") as HTMLUListElement;
+    tasksList.addEventListener("click", (event) => this.deleteTask(event));
+
+    // deleteButton.addEventListener("click", (event) => this.deleteTask(event));
   }
   private async checkServerStatus(): Promise<void> {
     try {
@@ -60,10 +65,28 @@ export class TaskController {
       }
 
       const taskItem = new Task(taskTitle, user.getID());
+      console.log(taskItem);
+      const timestamp = taskItem.getDate();
+      const dateFromTimestamp = new Date(timestamp);
+      console.log(dateFromTimestamp);
+
       this.taskManager.create(taskItem).then(() => this.outputHandler.handle());
       taskElement.value = "";
     } catch (error) {
       this.view.showError("Nepavyko sukurti uzduoties");
+    }
+  }
+  private async deleteTask(event: Event): Promise<void> {
+    const target = event.target as HTMLElement;
+    const elementId = target.getAttribute("element-id");
+    if (elementId) {
+      try {
+        this.taskManager
+          .remove(elementId)
+          .then(() => this.outputHandler.handle());
+      } catch (error) {
+        this.view.showError("Nepavyko istrinti uzduoties");
+      }
     }
   }
 }

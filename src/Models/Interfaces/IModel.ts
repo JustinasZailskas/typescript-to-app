@@ -2,8 +2,8 @@ export interface IModel {
   getID(): string;
   getTitle(): string;
   getStatus(): string;
-  getDate(): Date;
+  getDate(): number;
   setTitle(title: string): void;
   setStatus(status: string): void;
-  setDate(createdAt: Date): void;
+  setDate(createdAt: number): void;
 }
