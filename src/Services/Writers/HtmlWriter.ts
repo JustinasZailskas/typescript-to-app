@@ -17,7 +17,6 @@ export default class HtmlWriter implements IWriter {
     const statusButton = document.createElement("button");
 
     taskLiElement.textContent = item.getTitle();
-    console.log(item);
 
     const timestamp = item.getDate();
 

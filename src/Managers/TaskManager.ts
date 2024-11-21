@@ -22,8 +22,10 @@ export class TaskManager extends BaseManager implements IManager {
     const modelsJson = await response.json();
 
     modelsJson.forEach((taskData: any): void => {
-      const taskItem = new Task(taskData.title, taskData.description);
+      const taskItem = new Task(taskData.title, taskData.status);
       taskItem.setID(taskData._id);
+      taskItem.setDate(taskData.createdAt);
+      taskItem.setStatus(taskData.status);
       tasks.push(taskItem);
     });
 
@@ -43,14 +45,6 @@ export class TaskManager extends BaseManager implements IManager {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(model),
-    });
-  }
-  async printAllTasks(): Promise<void> {
-    const tasks = await fetch("http://localhost:3000/todo");
-    const tasksJson = await tasks.json();
-
-    tasksJson.forEach((taskData: any): void => {
-      const taskItem = new Task(taskData.title, taskData.author);
     });
   }
 }

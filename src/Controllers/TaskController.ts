@@ -9,12 +9,14 @@ export class TaskController {
   private taskManager: TaskManager;
   private outputHandler: OutputHandler;
   private view: TaskView;
+  private searcByTitleValue;
 
   constructor() {
     this.taskManager = new TaskManager();
     const htmlWriter = new HtmlWriter(this.taskManager);
     this.outputHandler = new OutputHandler(this.taskManager, htmlWriter);
     this.view = new TaskView(htmlWriter);
+    this.searcByTitleValue = "";
     this.initialize();
   }
 
@@ -37,7 +39,18 @@ export class TaskController {
     const tasksList = document.getElementById("tasksList") as HTMLUListElement;
     tasksList.addEventListener("click", (event) => this.deleteTask(event));
 
-    // deleteButton.addEventListener("click", (event) => this.deleteTask(event));
+    const filterInput = document.getElementById(
+      "filterByTitle"
+    ) as HTMLInputElement;
+    filterInput.addEventListener("input", (event) => {
+      this.searcByTitleValue = (event.target as HTMLInputElement).value;
+    });
+
+    const searchByTitleButton = document.getElementById(
+      "searchButton"
+    ) as HTMLButtonElement;
+
+    searchByTitleButton.addEventListener("click", () => this.searchByTitle());
   }
   private async checkServerStatus(): Promise<void> {
     try {
@@ -65,11 +78,6 @@ export class TaskController {
       }
 
       const taskItem = new Task(taskTitle, user.getID());
-      console.log(taskItem);
-      const timestamp = taskItem.getDate();
-      const dateFromTimestamp = new Date(timestamp);
-      console.log(dateFromTimestamp);
-
       this.taskManager.create(taskItem).then(() => this.outputHandler.handle());
       taskElement.value = "";
     } catch (error) {
@@ -87,6 +95,21 @@ export class TaskController {
       } catch (error) {
         this.view.showError("Nepavyko istrinti uzduoties");
       }
+    }
+  }
+  private async searchByTitle(): Promise<void> {
+    try {
+      if (!this.searcByTitleValue.trim()) {
+        this.view.showError("Iveskite uzduoties pavadinima");
+        return;
+      }
+      this.outputHandler.handleBySearch(this.searcByTitleValue);
+      const filterInput = document.getElementById(
+        "filterByTitle"
+      ) as HTMLInputElement;
+      filterInput.value = "";
+    } catch (error) {
+      this.view.showError("Nepavyko rasti task'u");
     }
   }
 }
