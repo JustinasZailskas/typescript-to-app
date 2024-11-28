@@ -6,7 +6,7 @@ import { IManager } from "../../Managers/IManager";
 export default class HtmlWriter implements IWriter {
   constructor(private manager: IManager) {}
 
-  async write(item: IModel): Promise<void> {
+  async write(item: Task): Promise<void> {
     const tasksList = document.getElementById("tasksList") as HTMLUListElement;
     const taskLiContainer = document.createElement("div");
     const taskLiElementContainer = document.createElement("div");

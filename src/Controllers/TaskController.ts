@@ -9,14 +9,14 @@ export class TaskController {
   private taskManager: TaskManager;
   private outputHandler: OutputHandler;
   private view: TaskView;
-  private searcByTitleValue;
+  private searchByTitleValue: string;
 
   constructor() {
     this.taskManager = new TaskManager();
     const htmlWriter = new HtmlWriter(this.taskManager);
     this.outputHandler = new OutputHandler(this.taskManager, htmlWriter);
     this.view = new TaskView(htmlWriter);
-    this.searcByTitleValue = "";
+    this.searchByTitleValue = "";
     this.initialize();
   }
 
@@ -27,7 +27,7 @@ export class TaskController {
       try {
         this.outputHandler.handle();
       } catch (error) {
-        this.view.showError("Nepavyko ikelti uzduociu");
+        this.view.showError("Nepavyko įkelti užduočių");
       }
     });
     const createButton = document.getElementById(
@@ -43,14 +43,14 @@ export class TaskController {
       "filterByTitle"
     ) as HTMLInputElement;
     filterInput.addEventListener("input", (event) => {
-      this.searcByTitleValue = (event.target as HTMLInputElement).value;
+      this.searchByTitleValue = (event.target as HTMLInputElement).value;
     });
 
     const searchByTitleButton = document.getElementById(
       "searchButton"
     ) as HTMLButtonElement;
 
-    searchByTitleButton.addEventListener("click", () => this.searchByTitle());
+    // searchByTitleButton.addEventListener("click", () => this.searchByTitle());
   }
   private async checkServerStatus(): Promise<void> {
     try {
@@ -70,18 +70,18 @@ export class TaskController {
         "newTaskInput"
       ) as HTMLInputElement;
       const taskTitle: string = taskElement.value;
-      const user = new User("Justinas");
+      const user = "justinas";
 
       if (!taskTitle.trim()) {
-        this.view.showError("Iveskite uzduoti");
+        this.view.showError("Įveskite užduotį");
         return;
       }
 
-      const taskItem = new Task(taskTitle, user.getID());
+      const taskItem = new Task(taskTitle);
       this.taskManager.create(taskItem).then(() => this.outputHandler.handle());
       taskElement.value = "";
     } catch (error) {
-      this.view.showError("Nepavyko sukurti uzduoties");
+      this.view.showError("Nepavyko sukurti užduoties");
     }
   }
   private async deleteTask(event: Event): Promise<void> {
@@ -93,23 +93,23 @@ export class TaskController {
           .remove(elementId)
           .then(() => this.outputHandler.handle());
       } catch (error) {
-        this.view.showError("Nepavyko istrinti uzduoties");
+        this.view.showError("Nepavyko ištrinti užduoties");
       }
     }
   }
-  private async searchByTitle(): Promise<void> {
-    try {
-      if (!this.searcByTitleValue.trim()) {
-        this.view.showError("Iveskite uzduoties pavadinima");
-        return;
-      }
-      this.outputHandler.handleBySearch(this.searcByTitleValue);
-      const filterInput = document.getElementById(
-        "filterByTitle"
-      ) as HTMLInputElement;
-      filterInput.value = "";
-    } catch (error) {
-      this.view.showError("Nepavyko rasti task'u");
-    }
-  }
+  // private async searchByTitle(): Promise<void> {
+  //   try {
+  //     if (!this.searchByTitleValue.trim()) {
+  //       this.view.showError("Įveskite užduoties pavadinimą");
+  //       return;
+  //     }
+  //     this.outputHandler.handleBySearch(this.searchByTitleValue);
+  //     const filterInput = document.getElementById(
+  //       "filterByTitle"
+  //     ) as HTMLInputElement;
+  //     filterInput.value = "";
+  //   } catch (error) {
+  //     this.view.showError("Nepavyko rasti užduočių");
+  //   }
+  // }
 }

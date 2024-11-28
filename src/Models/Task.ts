@@ -1,17 +1,43 @@
-import { BaseModel } from "./BaseModel";
-import { User } from "./User";
+import { IModel } from "./Interfaces/IModel";
 
-export class Task extends BaseModel {
-  private author: string;
-  constructor(title: string, userId: string) {
-    super(title);
-    this.author = userId;
+export class Task implements IModel {
+  private userId: string = "";
+  private _id: string = "";
+  private status: string;
+  private createdAt: Date;
+  constructor(private title: string) {
+    this.status = "Created";
+    this.createdAt = new Date();
+  }
+  getID(): string {
+    return this._id;
+  }
+  getTitle(): string {
+    return this.title;
+  }
+  getStatus(): string {
+    return this.status;
+  }
+  getDate(): Date {
+    return this.createdAt;
+  }
+  setID(id: string): void {
+    this._id = id;
+  }
+  setTitle(title: string): void {
+    this.title = title;
+  }
+  setStatus(status: string): void {
+    this.status = status;
+  }
+  setDate(createdAt: number): void {
+    this.createdAt = new Date(createdAt);
   }
 
-  setAuthor(user: User): void {
-    this.author = user.getID();
+  setUserId(user: string): void {
+    this.userId = user;
   }
-  getAuthor(): User {
-    return new User(this.author);
+  getUserId(): string {
+    return this.userId;
   }
 }

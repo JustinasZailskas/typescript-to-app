@@ -17,34 +17,48 @@ export class TaskManager extends BaseManager implements IManager {
     throw new Error("update Method not implemented.");
   }
   async getAll(): Promise<Task[]> {
-    let tasks: Task[] = [];
-    const response = await fetch("http://localhost:3000/todo");
-    const modelsJson = await response.json();
+    try {
+      let tasks: Task[] = [];
+      const response = await fetch("http://localhost:3000/todo");
 
-    modelsJson.forEach((taskData: any): void => {
-      const taskItem = new Task(taskData.title, taskData.status);
-      taskItem.setID(taskData._id);
-      taskItem.setDate(taskData.createdAt);
-      taskItem.setStatus(taskData.status);
-      tasks.push(taskItem);
-    });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    return tasks;
+      const modelsJson = await response.json();
+
+      if (!modelsJson) {
+        console.log("No tasks");
+        return [];
+      }
+
+      modelsJson.forEach((taskData: any): void => {
+        const taskItem = new Task(taskData.title);
+        taskItem.setID(taskData._id);
+        taskItem.setDate(taskData.createdAt);
+        taskItem.setStatus(taskData.status);
+        tasks.push(taskItem);
+      });
+
+      return tasks;
+    } catch (error) {
+      console.error("Failed to fetch tasks:", error);
+      throw new Error("Authentication failed or server error occurred");
+    }
   }
   getById(id: string): Promise<IModel | null> {
     throw new Error("getByID Method not implemented.");
   }
   async create(model: Task): Promise<void> {
-    const user = new User("Justinas");
-    user.setID("Justinas");
-    model.setAuthor(user);
-
-    await fetch("http://localhost:3000/todo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(model),
-    });
+    // const user = new User();
+    // user.setId("Justinas");
+    // model.setUserId(user.getID());
+    // await fetch("http://localhost:3000/todo", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(model),
+    // });
   }
 }
