@@ -19,7 +19,12 @@ export class TaskManager extends BaseManager implements IManager {
   async getAll(): Promise<Task[]> {
     try {
       let tasks: Task[] = [];
-      const response = await fetch("http://localhost:3000/todo");
+      const response = await fetch("http://localhost:3000/todo", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

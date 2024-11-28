@@ -17,12 +17,17 @@ export class TaskController {
     this.outputHandler = new OutputHandler(this.taskManager, htmlWriter);
     this.view = new TaskView(htmlWriter);
     this.searchByTitleValue = "";
+
+    // Show task view
+    const taskView = document.getElementById("taskView");
+    if (taskView) {
+      taskView.style.display = "block";
+    }
+
     this.initialize();
   }
 
   private initialize(): void {
-    this.checkServerStatus();
-
     document.addEventListener("DOMContentLoaded", () => {
       try {
         this.outputHandler.handle();

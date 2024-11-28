@@ -9,15 +9,16 @@ export class RegisterView {
   private initializeForm() {
     this.formElement.innerHTML = `
             <label>
-                Username: <input type="text" id="username" required />
+                Username: <input type="text" id="username" name="username" placeholder="Iveskite varda" required />
             </label>
             <label>
-                Email: <input type="email" id="email" required />
+                Email: <input type="email" id="email" name="email" placeholder="Iveskite el. pašta" required />
             </label>
             <label>
-                Password: <input type="password" id="password" required />
+                Password: <input type="password" id="password" name="password" placeholder="Iveskite slaptažodi" required />
             </label>
-            <button type="submit">Register</button>
+            <button type="submit" class="buttonLogReg">Register</button>
+            <p class="switch-form">Jau turite paskyrą? <a href="#" id="switchToLogin">Prisijunkite čia</a></p>
         `;
   }
 
@@ -43,5 +44,15 @@ export class RegisterView {
 
       callback({ username, email, password });
     });
+  }
+
+  public onSwitchToLogin(callback: () => void) {
+    const switchLink = this.formElement.querySelector("#switchToLogin");
+    if (switchLink) {
+      switchLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        callback();
+      });
+    }
   }
 }

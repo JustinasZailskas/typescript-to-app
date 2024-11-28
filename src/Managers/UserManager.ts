@@ -1,37 +1,37 @@
 import { User } from "../Models/User";
 
 export class UserManager {
-  async login(email: string, password: string): Promise<User | null> {
+  async login(email: string, password: string): Promise<boolean> {
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`http://localhost:3000/login`, {
         method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
         throw new Error("Login failed");
       }
 
-      const userData = await response.json();
-      const user = new User(userData.username, userData.email, password);
-      user.setId(userData._id);
+      const token = await response.json();
 
-      // Store user ID in localStorage
-      localStorage.setItem("currentUserId", user.getID());
-
-      return user;
+      // Store token in localStorage
+      localStorage.setItem("token", token.token);
+      return true;
     } catch (error) {
       console.error("Login error:", error);
-      return null;
+      return false;
     }
   }
 
   async register(model: User): Promise<User | null> {
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
