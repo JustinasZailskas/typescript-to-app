@@ -2,6 +2,7 @@ import { UserManager } from "../Managers/UserManager";
 import { RegisterView } from "../Views/RegisterView";
 import { LoginView } from "../Views/LoginView";
 import { User } from "../Models/User";
+import { BaseError, ErrorHandler } from "../Services/ErrorHandler";
 
 export class UserController {
   private userManager: UserManager;
@@ -31,12 +32,12 @@ export class UserController {
       try {
         const success = await this.userManager.login(data.email, data.password);
         if (success) {
-          console.log("Login successful");
           this.mainContainer!.innerHTML = "";
           document.dispatchEvent(new Event("userLoggedIn"));
         }
       } catch (error) {
-        console.error("Login failed:", error);
+        const eh = ErrorHandler.getInstance();
+        eh.handle(error);
       }
     });
 
@@ -50,7 +51,10 @@ export class UserController {
           this.showLoginForm(); // Po sėkmingos registracijos grįžtame į login
         }
       } catch (error) {
-        console.error("Registration failed:", error);
+        if (error instanceof BaseError) {
+          ErrorHandler.getInstance().handle(error);
+        }
+        console.error(error);
       }
     });
 

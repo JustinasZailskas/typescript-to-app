@@ -1,32 +1,38 @@
 import { User } from "../Models/User";
+import {
+  AuthError,
+  ServerError,
+  UndefinedError,
+} from "../Services/ErrorHandler";
 
 export class UserManager {
   async login(email: string, password: string): Promise<boolean> {
-    try {
-      const response = await fetch(`http://localhost:3000/login`, {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await fetch(`http://localhost:3000/login`, {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (!response.ok) {
-        throw new Error("Login failed");
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new AuthError("Invalid credentials");
       }
-
-      const token = await response.json();
-
-      // Store token in localStorage
-      localStorage.setItem("token", token.token);
-      return true;
-    } catch (error) {
-      console.error("Login error:", error);
-      return false;
+      if (response.status >= 500) {
+        throw new ServerError();
+      }
+      throw new UndefinedError();
     }
+
+    const responseData = await response.json();
+    console.log(responseData);
+    // Store token in localStorage
+    localStorage.setItem("token", responseData.token);
+    return true;
   }
 
   async register(model: User): Promise<User | null> {
@@ -51,14 +57,4 @@ export class UserManager {
       return null;
     }
   }
-
-  logout(): void {
-    localStorage.removeItem("currentUserId");
-  }
-
-  getCurrentUserId(): string | null {
-    return localStorage.getItem("currentUserId");
-  }
-
-  // IManager interface implementation
 }

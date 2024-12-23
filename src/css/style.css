@@ -130,3 +130,10 @@ input[type="password"] {
 .switch-form a:hover {
   text-decoration: underline;
 }
+
+#notification-container {
+  color: red;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}

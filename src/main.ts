@@ -4,7 +4,9 @@ import { TaskController } from "./Controllers/TaskController";
 import { UserController } from "./Controllers/UserController";
 
 // Start with UserController (registration form)
-new UserController();
+if (!localStorage.getItem("token")) {
+  new UserController();
+}
 
 // Initialize TaskController only after user is registered
 document.addEventListener("userRegistered", () => {
@@ -13,3 +15,6 @@ document.addEventListener("userRegistered", () => {
 document.addEventListener("userLoggedIn", () => {
   new TaskController();
 });
+if (localStorage.getItem("token")) {
+  document.dispatchEvent(new Event("userLoggedIn"));
+}

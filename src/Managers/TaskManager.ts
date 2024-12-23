@@ -10,6 +10,7 @@ export class TaskManager extends BaseManager implements IManager {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
   }
@@ -18,6 +19,9 @@ export class TaskManager extends BaseManager implements IManager {
   }
   async getAll(): Promise<Task[]> {
     try {
+      if (!localStorage.getItem("token")) {
+        throw new Error("Authentication failed"); // @TODO: nurodyti jog reikia prisijungti ir nukreipti i prisijungimo formos
+      }
       let tasks: Task[] = [];
       const response = await fetch("http://localhost:3000/todo", {
         headers: {
@@ -55,15 +59,13 @@ export class TaskManager extends BaseManager implements IManager {
     throw new Error("getByID Method not implemented.");
   }
   async create(model: Task): Promise<void> {
-    // const user = new User();
-    // user.setId("Justinas");
-    // model.setUserId(user.getID());
-    // await fetch("http://localhost:3000/todo", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(model),
-    // });
+    await fetch("http://localhost:3000/todo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(model),
+    });
   }
 }
